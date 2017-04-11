@@ -1,16 +1,16 @@
 # Event-driven architecture style
 
-In an event driven architecture, application behavior is driven by asynchronous events, using a publish-subscribe (pub-sub) model. In some systems, such as IoT, events must be ingested at very high volumes.
+An event-driven architecture consists of **event producers** that generate a stream of events, and **event consumers** that listen for the events. 
 
-![](./images/event-driven.png)
+![](./images/event-driven.svg)
 
-At its heart, an event-driven architecture consists of event producers and event consumers. Producers generate events, and consumers listen for them. Producers are decoupled from consumers &mdash; a producer doesn't know which consumers are listening. The events go to all of the consumers, which process them independently from each other. (This differs from a [competing consumers][competing-consumers] pattern.) Events are delivered in near real time, so consumers can respond immediately to events as they occur.
+Events are delivered in near real time, so consumers can respond immediately to events as they occur. Producers are decoupled from consumers &mdash; a producer doesn't know which consumers are listening. Consumers are also decoupled from each other, and every consumer sees all of the events. This differs from a [Competing Consumers][competing-consumers] pattern, where consumers pull messages from a queue and a message is processed just once (assuming no errors). In some systems, such as IoT, events must be ingested at very high volumes.
 
-An event driven architecture can use a publish/subscribe ("pub/sub") model, or an event stream model. 
+An event driven architecture can use a pub/sub model or an event stream model. 
 
 - **Pub/sub**: The messaging infrastructure keeps track of subscriptions. When an event is published, it sends the event to each subscriber. After an event is received, it cannot be replayed, and new subscribers do not see the event. 
 
-- **Event streaming**: Events are written to a log. Events are strictly ordered (within a partition) and durable. Clients don't "subscribe" to the stream, instead a client can read from any part of the stream. The client is responsible for advancing it's position in the stream. That means a client can join at any time, and can replay events.
+- **Event streaming**: Events are written to a log. Events are strictly ordered (within a partition) and durable. Clients don't subscribe to the stream, instead a client can read from any part of the stream. The client is responsible for advancing its position in the stream. That means a client can join at any time, and can replay events.
 
 On the consumer side, there are some common variations:
 
@@ -22,7 +22,7 @@ On the consumer side, there are some common variations:
 
 The source of the events may be external to the system, such as physical devices in an IoT solution. In that case, the system must be able to ingest the data at the volume and throughput that is required by the data source.
 
-In the logical diagram above, each type of consumer is shown as a single box. In practice, it's common to have multiple instances of a consumer, to avoid having the consumer become a single point of failure in system. Multiple instances might also be necessary  to handle the volume and frequency of events. Also, a single consumer might process events on multiple threads. This can create challenges if events must be processed in order, or require exactly-once semantics. See [Minimize Coordination][minimize-coordination]. 
+In the logical diagram above, each type of consumer is shown as a single box. In practice, it's common to have multiple instances of a consumer, to avoid having the consumer become a single point of failure in system. Multiple instances might also be necessary to handle the volume and frequency of events. Also, a single consumer might process events on multiple threads. This can create challenges if events must be processed in order, or require exactly-once semantics. See [Minimize Coordination][minimize-coordination]. 
 
 ## When to use this architecture
 
@@ -42,27 +42,25 @@ In the logical diagram above, each type of consumer is shown as a single box. In
 ## Challenges
 
 - Guaranteed delivery. In some systems, especially in IoT scenarios, it's crucial to guarantee that events are delivered.
-- Processing events in order. 
-- Exactly-once processing.
-
+- Processing events in order or exactly once. Each consumer type typically runs in multiple instances, for resiliency and scalability. This can create a challenge if the events must be processed in order (within a consumer type), or if the processing logic is not idempotent.
 
 ## IoT architecture
 
-Event driven architectures are central to IoT solutions. The following diagram shows a possible logical architecture for IoT. The diagram emphasizes the event-streaming components of the architecture.
+Event-driven architectures are central to IoT solutions. The following diagram shows a possible logical architecture for IoT. The diagram emphasizes the event-streaming components of the architecture.
 
 ![](./images/iot.png)
 
 The **cloud gateway** ingests device events at the cloud boundary, using a reliable, low latency messaging system.
 
-Devices might send events directly to the cloud gateway, or through a **field gateway**. A field gateway is a specialized device or software, usually co-located with the devices, that receives events and forwards them to the cloud gateway. The field gateway might also pre-process the raw device events, performing functions such as filtering, aggregation, or protocol transformation.
+Devices might send events directly to the cloud gateway, or through a **field gateway**. A field gateway is a specialized device or software, usually colocated with the devices, that receives events and forwards them to the cloud gateway. The field gateway might also preprocess the raw device events, performing functions such as filtering, aggregation, or protocol transformation.
 
-After ingestion, events go through one ore more **stream processors** that can route the data (for example, to storage) or perform analytics and other processing.
+After ingestion, events go through one or more **stream processors** that can route the data (for example, to storage) or perform analytics and other processing.
 
 The following are some common types of processing. (This list is certainly not exhaustive.)
 
 - Writing event data to cold storage, for archiving or batch analytics.
 
-- Hot path analytics: Analyzing the event stream in (near) real time, to detect anomalies, recognize patterns over rolling time windows, or trigger alerts when a specific condition occurs in the stream. 
+- Hot path analytics, analyzing the event stream in (near) real time, to detect anomalies, recognize patterns over rolling time windows, or trigger alerts when a specific condition occurs in the stream. 
 
 - Handling special types of non-telemetry messages from devices, such as notifications and alarms. 
 
