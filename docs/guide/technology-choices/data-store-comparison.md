@@ -1,4 +1,4 @@
-# Comparison of data store types.
+# Criteria for choosing a data store
 
 Azure supports many types of data storage solutions, each providing different features and capabilities. This document will lay out the comparison criteria you should use when evaluating a data storage type, and then provide you with a breakdown of what each storage type provides. Its goal is to help you determine which data storage types can meet your solution's requirements.
 
