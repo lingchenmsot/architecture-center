@@ -2,7 +2,7 @@
 layout: LandingPage
 ---
 
-# Azure compute options comparison
+# Comparison of Azure compute options 
 
 The term *compute* refers to the hosting model for the computing resources that your applications runs on. 
 

@@ -1,4 +1,4 @@
-Storage options guide
+# Comparison of data store types.
 
 Azure supports many types of data storage solutions, each providing different features and capabilities. This document will lay out the comparison criteria you should use when evaluating a data storage type, and then provide you with a breakdown of what each storage type provides. Its goal is to help you determine which data storage types can meet your solution's requirements.
 
@@ -9,12 +9,12 @@ To start your comparison, gather as much of the following information as you can
 ### Functional requirements
 
 - **Data format**. What type of data are you intending to store? Common types include transactional data, JSON objects, telemetry, search indexes, flat files, etc.
-- **Data size**. how large are the entities you need to store? Will these entities need to be maintained as a single document or can they be split among multiple documents/tables/collections/nodes/entities?
+- **Data size**. How large are the entities you need to store? Will these entities need to be maintained as a single document or can they be split among multiple documents/tables/collections/nodes/entities?
 - **Scale and structure**. What is the overall amount of storage capacity you need? Do you anticipate partitioning your data? 
 - **Data relationships**. Will your data need to support one to many or many to many relationships? Are relationships themselves an important part of the data? Will you need to join or otherwise combine data from within the same dataset? From external datasets? 
 - **Consistency model**. How important is it for any updates made in one data storage node to be represented in all other nodes in the system before further changes can be made? Can you accept eventual consistency in exchange for other performance gains and features? Do you need multiple operations completed using ACID transactions?
 - **Schema flexibility**. What kind of schemas will you apply to your data? Will you use a fixed schema, a schema-on-write mechanism, or a schema-on-read approach?
-- **Concurrency**. What kind of concurrency mechanism to you want to use when updating and syncing data? Will you be performing many updates that could potentially conflict, requiring record locking and a pessimistic concurrency control mechanism, or can you support optimistic controls? If optimistic, can you support simple timestamp-based control, or will you want the added functionality of multi-version concurrency control?
+- **Concurrency**. What kind of concurrency mechanism do you want to use when updating and syncing data? Will you be performing many updates that could potentially conflict, requiring record locking and a pessimistic concurrency control mechanism, or can you support optimistic controls? If optimistic, can you support simple timestamp-based control, or will you want the added functionality of multi-version concurrency control?
 - **Data movement**. Will your data solution need to perform ETL tasks to move data to other stores or data warehouses?
 - **Data lifecycle**. Is the data write once, read many (WORM)? Can it be moved into cool or cold storage?
 - **Other supported features**. Are there other specific features you will need to use with your datastore, such as schema validation, aggregation, indexing, full-text search, MapReduce, or other query capabilities?
@@ -47,6 +47,7 @@ To start your comparison, gather as much of the following information as you can
 - **Skill set**. Are there particular programming languages, operating systems, or other technology that your team is particularly adept at using? Are there others that would be difficult for your team to work with?
 - **Clients** Is there good client support for your development languages?
 
+The following sections compare various data store models in terms of workload profile, data types, and example use cases.
 
 ## Relational database management systems (RDBMS)
 

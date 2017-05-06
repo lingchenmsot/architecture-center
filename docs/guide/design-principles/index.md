@@ -6,7 +6,7 @@ layout: LandingPage
 
 # Design principles for Azure applications
 
-The design principles described here will help to make your application more scalable, resilient, and manageable. 
+Following these design principles will help to make your application more scalable, resilient, and manageable. 
 
 **[Design for self healing](self-healing.md)**. In a distributed system, failures happen. Design your application to be self healing when failures occur.
 
